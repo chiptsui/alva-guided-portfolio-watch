@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guided Portfolio Watch</title>
+  <link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/v1/design-system.css">
+  <script src="https://unpkg.com/@alva-ai/toolkit/dist/browser.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+  <style>
+    html{height:100%;overflow:hidden}
+    body{height:100%;overflow-y:auto;overflow-x:hidden;background:var(--b0-page);color:var(--text-n9)}
+    .playbook-container{width:100%;max-width:860px;margin:0 auto;padding:var(--spacing-s) var(--spacing-xl) var(--spacing-xxxxl)}
+    .section{margin-bottom:var(--spacing-xxxxl)}
+    .note{font-size:12px;color:var(--text-n5);line-height:20px}
+    .panel{background:var(--grey-g01);padding:var(--spacing-l);border-radius:var(--radius-ct-s)}
+    .heading{font-size:16px;font-weight:400;margin-bottom:var(--spacing-m)}
+    .metric-row{display:flex;flex-wrap:wrap;gap:var(--spacing-xl)}
+    .metric-row>div{flex:1 1 140px}
+    .metric-value{font-size:22px;font-weight:400;margin:var(--spacing-xs) 0}
+    .company-title{font-size:20px;font-weight:400;margin:var(--spacing-xl) 0 var(--spacing-s)}
+    details>summary{cursor:pointer;font-size:14px;font-weight:500;padding:var(--spacing-m);min-height:44px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--radius-ct-s);background:var(--grey-g02,rgba(0,0,0,0.06));list-style:none;-webkit-user-select:none;user-select:none;gap:var(--spacing-m)}
+    details>summary::-webkit-details-marker{display:none}
+    details>summary:hover{background:var(--grey-g03,rgba(0,0,0,0.10))}
+    details>summary::before{display:none}
+    details>summary::after{content:"\203A";font-size:20px;color:var(--text-n5);transform:rotate(90deg);line-height:1;flex-shrink:0}
+    details[open]>summary::after{transform:rotate(-90deg)}
+    .fin-table{width:100%;border-collapse:collapse;font-size:13px}
+    .fin-table th{text-align:left;padding:4px 8px;font-weight:500;color:var(--text-n5);border-bottom:1px solid var(--border-n3)}
+    .fin-table td{padding:6px 8px;border-bottom:1px solid var(--border-n2)}
+    .fin-table tr:last-child td{border-bottom:none}
+    .ticker-tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:500;background:var(--brand-b2-n2,rgba(0,115,230,0.12));color:var(--brand-b2,#0073e6);margin-right:6px}
+    .status-tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;margin-left:4px}
+    .status-tag.holding{background:var(--green-n1,rgba(39,174,96,0.12));color:var(--green-n7,#27ae60)}
+    .status-tag.watchlist{background:var(--blue-n1,rgba(52,152,219,0.12));color:var(--blue-n7,#2980b9)}
+    .status-tag.monitored{background:var(--grey-g02,rgba(0,0,0,0.06));color:var(--text-n5)}
+    .unavail-notice{padding:var(--spacing-m) 0;color:var(--text-n5)}
+    .demo-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:500;background:var(--grey-g02,rgba(0,0,0,0.06));color:var(--text-n5);margin-left:8px;letter-spacing:0.04em;vertical-align:middle}
+    .yoy-up{color:var(--green-n7,#27ae60)}
+    .yoy-dn{color:var(--text-n5)}
+    .insight-card{background:var(--grey-g01);padding:var(--spacing-m) var(--spacing-l);border-radius:var(--radius-ct-s);margin-bottom:var(--spacing-m)}
+    .insight-card-head{font-size:13px;font-weight:500;margin-bottom:var(--spacing-m);color:var(--text-n7)}
+    .insight-metrics{display:flex;flex-wrap:wrap;gap:var(--spacing-l);margin-bottom:var(--spacing-m)}
+    .insight-metric{min-width:100px}
+    .insight-metric-label{font-size:11px;color:var(--text-n5);margin-bottom:2px}
+    .insight-metric-value{font-size:16px;font-weight:400}
+    .insight-metric-change{font-size:12px;margin-top:2px}
+    .insight-text{font-size:13px;line-height:1.6;color:var(--text-n7);margin-bottom:var(--spacing-s)}
+    .insight-watch{font-size:12px;color:var(--text-n5)}
+    .insight-section-label{font-size:11px;font-weight:500;color:var(--text-n5);text-transform:uppercase;letter-spacing:0.06em;margin:var(--spacing-m) 0 var(--spacing-xs);display:block}
+    @media(max-width:768px){.playbook-container{padding:var(--spacing-m)}.metric-row>div{flex:1 1 100%}.insight-metrics{gap:var(--spacing-m)}}
+  </style>
+</head>
+<body>
+<main class="playbook-container">
+
+  <!-- ── 1. PORTFOLIO OVERVIEW ─────────────────────────────────────────── -->
+  <section class="section">
+    <div id="portfolio-header">
+      <p class="note">Loading portfolio configuration…</p>
+    </div>
+  </section>
+
+  <!-- ── 2. PORTFOLIO INSIGHTS ────────────────────────────────────────── -->
+  <section class="section">
+    <div class="heading" id="insights-heading">Your watchlist, explained</div>
+    <p id="insights-meta" class="note">Computing year-over-year changes…</p>
+    <div id="insights-data"></div>
+  </section>
+
+  <!-- ── 3. ATTENTION STATUS ───────────────────────────────────────────── -->
+  <section class="section panel">
+    <div class="heading">Does anything deserve your attention?</div>
+    <div id="attention-status" class="markdown-container markdown-container--s">
+      <p class="note">Checking latest review…</p>
+    </div>
+  </section>
+
+  <!-- ── 4. COMPANIES OVERVIEW ─────────────────────────────────────────── -->
+  <section class="section">
+    <div class="heading" id="companies-heading">Companies on your watchlist</div>
+    <p id="companies-meta" class="note">Loading financial statements…</p>
+    <div id="companies-data"></div>
+  </section>
+
+  <!-- ── 5. BEGINNER GUIDE ─────────────────────────────────────────────── -->
+  <section class="section panel">
+    <div class="heading" id="guide-heading">Understanding your watchlist</div>
+    <p id="guide-desc">This watch reviews publicly-available financial statements and news for the companies on your watchlist. It focuses on developments that matter over multi-year time horizons — not short-term price moves.</p>
+    <details style="margin-top:var(--spacing-m)">
+      <summary>What does an alert mean?</summary>
+      <p style="margin-top:var(--spacing-s)">An alert means a material business event has been detected — such as a significant earnings surprise, a major regulatory decision, or a strategic acquisition. It is a prompt to read the linked evidence and decide whether your long-term view of the business has changed. It is not a buy or sell instruction.</p>
+    </details>
+    <details style="margin-top:var(--spacing-s)">
+      <summary>What do revenue, net income, and free cash flow mean?</summary>
+      <p style="margin-top:var(--spacing-s)"><strong>Revenue</strong> is total sales — all money received from customers. <strong>Net income</strong> is profit after every expense including taxes. <strong>Operating cash flow</strong> is actual cash generated by running the business (excludes non-cash accounting items). <strong>Free cash flow</strong> is cash left after spending on long-lived assets (factories, equipment). Positive and growing free cash flow generally indicates a financially healthy business.</p>
+    </details>
+    <details style="margin-top:var(--spacing-s)">
+      <summary>How current is this data?</summary>
+      <p style="margin-top:var(--spacing-s)">Financial statement data is sourced from structured filing databases and may lag the most recent earnings announcement by days. The retrieval date is shown next to each company's data. For real-time developments, check linked news sources in any alert.</p>
+    </details>
+    <p id="guide-disclaimer" class="note" style="margin-top:var(--spacing-l)">This Playbook is for informational purposes only and does not constitute investment advice. These are watchlist symbols only — no positions, quantities, cost bases, or portfolio values were provided.</p>
+  </section>
+
+  <!-- ── 6. LATEST ALERT ────────────────────────────────────────────────── -->
+  <section class="section panel" id="alert-section" style="display:none">
+    <div class="heading">Latest alert</div>
+    <div id="alert-body" class="markdown-container markdown-container--s"></div>
+  </section>
+
+</main>
+<script>
+"use strict";
+
+// ── AlvaClient — correct viewer auth contract (matches platform SDK) ───────
+function createAlvaClient() {
+  var p = new URLSearchParams(location.search);
+  var t = window.alva && window.alva.udf && window.alva.udf.getViewerToken
+    ? window.alva.udf.getViewerToken()
+    : null;
+  var o = p.get("api_origin");
+  return new AlvaToolkit.AlvaClient(Object.assign(
+    {},
+    t ? {pbsvToken: t} : {},
+    o ? {baseUrl: o.replace(/\/$/, "")} : {}
+  ));
+}
+
+// Hardcoded to this user's ALFS home — correct for this published Playbook.
+// Reusability limitation: must be updated manually when deploying for a different account.
+var HOME = "/alva/home/c9jsd/feeds/";
+
+// ── Read helpers ─────────────────────────────────────────────────────────
+// readTimeSeries: normalises the Alva feed time-series envelope to a flat array.
+async function readTimeSeries(path) {
+  var x = await createAlvaClient().fs.read({path: path});
+  while (typeof x === "string") x = JSON.parse(x);
+  var arr = Array.isArray(x) ? x : [x];
+  return arr.flatMap(function(r) { return r.items || [r]; });
+}
+
+// ── Formatting helpers ───────────────────────────────────────────────────
+var esc = function(x) {
+  return String(x == null ? "—" : x).replace(/[&<>"']/g, function(c) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+};
+var bn = function(x) {
+  return typeof x === "number"
+    ? (x / 1e9).toLocaleString("en-US", {maximumFractionDigits: 2}) + "B"
+    : "—";
+};
+var pct = function(x) {
+  return typeof x === "number" ? (x * 100).toFixed(1) + "%" : "—";
+};
+var byDateDesc = function(a, b) {
+  return (b.calendar_end_date || "").localeCompare(a.calendar_end_date || "");
+};
+// latestFY: c.income contains only FY records (pre-filtered by fundamentals feed).
+var latestFY = function(arr) {
+  return arr && arr.length ? arr.slice().sort(byDateDesc)[0] : null;
+};
+// latestQ: c.incomeQ contains only quarterly records (pre-filtered by fundamentals feed).
+var latestQ = function(arr) {
+  return arr && arr.length ? arr.slice().sort(byDateDesc)[0] : null;
+};
+// parseAsOf: handles ISO string, unix-ms number, or numeric string.
+var parseAsOf = function(v) {
+  if (v == null) return null;
+  var n = Number(v);
+  return new Date(isNaN(n) ? v : n);
+};
+
+// markdown-it with external links opening in new tab
+var md = window.markdownit({html: false, linkify: true});
+var _mdLinkOpen = md.renderer.rules.link_open || function(t, i, o, e, r) { return r.renderToken(t, i, o); };
+md.renderer.rules.link_open = function(t, i, o, e, r) {
+  t[i].attrSet("target", "_blank");
+  t[i].attrSet("rel", "noopener noreferrer");
+  return _mdLinkOpen(t, i, o, e, r);
+};
+
+// ── Shared fundamentals snapshot ─────────────────────────────────────────
+// Reads once; drives both portfolio overview and companies section.
+// Config display data is derived from monitoringContext embedded in the snapshot
+// (non-sensitive fields: tickers, horizon, guidanceMode, holdings).
+// This is the only bundled feed (36243) — accessible to public viewers via PBSV token.
+async function loadFundamentalsSnapshot() {
+  var rows = await readTimeSeries(HOME + "gpw-fundamentals/v1/data/fundamentals/snapshot/@last/1");
+  if (!rows.length) throw new Error("No fundamentals snapshot");
+  var snap    = rows[rows.length - 1];
+  var payload = typeof snap.payloadJson === "string" ? JSON.parse(snap.payloadJson) : snap;
+  var mc      = payload.monitoringContext || {};
+  // cfg: display-only fields derived from canonical MonitoringConfig (not a second config source).
+  var cfg = {
+    tickers:      mc.tickers      || [],
+    horizon:      mc.horizon      || "long-term",
+    guidanceMode: mc.guidanceMode || null,   // present after updated fundamentals feed runs
+    holdings:     mc.holdings     || {},     // present after updated fundamentals feed runs
+    weights:      mc.weights      || null,
+  };
+  return {snap: snap, payload: payload, cfg: cfg};
+}
+
+// ── 0. Context-aware section headings ────────────────────────────────────
+// Derives "watchlist" / "holdings" / "portfolio" (mixed) from the holdings map
+// so section headings remain semantically accurate for any configuration.
+function portfolioLabel(holdings) {
+  var vals = Object.keys(holdings || {}).map(function(k) { return holdings[k]; });
+  if (!vals.length) return "watchlist";
+  var hasHolding   = vals.some(function(v) { return v === "holding"; });
+  var hasWatchlist = vals.some(function(v) { return v === "watchlist"; });
+  if (hasHolding && hasWatchlist) return "portfolio";
+  if (hasHolding) return "holdings";
+  return "watchlist";
+}
+
+function renderSectionHeadings(cfg) {
+  var label = portfolioLabel(cfg.holdings);
+  var heads = {
+    watchlist: {
+      insights:   "Your watchlist, explained",
+      companies:  "Companies on your watchlist",
+      guide:      "Understanding your watchlist",
+      desc:       "This watch reviews publicly-available financial statements and news for the companies on your watchlist. It focuses on developments that matter over multi-year time horizons — not short-term price moves.",
+      disclaimer: "This Playbook is for informational purposes only and does not constitute investment advice. These are watchlist symbols only — no positions, quantities, cost bases, or portfolio values were provided.",
+    },
+    holdings: {
+      insights:   "Your holdings, explained",
+      companies:  "Companies in your portfolio",
+      guide:      "Understanding your portfolio",
+      desc:       "This watch reviews publicly-available financial statements and news for the companies in your portfolio. It focuses on developments that matter over multi-year time horizons — not short-term price moves.",
+      disclaimer: "This Playbook is for informational purposes only and does not constitute investment advice. Holding status labels are user-configured assumptions. No quantities, cost bases, or total portfolio value were provided.",
+    },
+    portfolio: {
+      insights:   "Your tracked companies, explained",
+      companies:  "Companies you're tracking",
+      guide:      "Understanding your tracked companies",
+      desc:       "This watch reviews publicly-available financial statements and news for the companies you're tracking. It focuses on developments that matter over multi-year time horizons — not short-term price moves.",
+      disclaimer: "This Playbook is for informational purposes only and does not constitute investment advice. Status labels (Watching / Holding) are user-configured assumptions. No quantities, cost bases, or total portfolio value were provided.",
+    },
+  };
+  var s = heads[label] || heads.watchlist;
+  var el;
+  el = document.getElementById("insights-heading");  if (el) el.textContent = s.insights;
+  el = document.getElementById("companies-heading"); if (el) el.textContent = s.companies;
+  el = document.getElementById("guide-heading");     if (el) el.textContent = s.guide;
+  el = document.getElementById("guide-desc");        if (el) el.textContent = s.desc;
+  el = document.getElementById("guide-disclaimer");  if (el) el.textContent = s.disclaimer;
+}
+
+// ── 1. Portfolio overview ─────────────────────────────────────────────────
+function renderPortfolioOverview(cfg) {
+  var el       = document.getElementById("portfolio-header");
+  var tickers  = cfg.tickers  || [];
+  var holdings = cfg.holdings || {};
+
+  var horizonLabel = cfg.horizon === "medium-term"
+    ? "Medium-term horizon (1–3 years)"
+    : "Long-term horizon (3–5 years)";
+
+  var guidanceLabel = cfg.guidanceMode
+    ? ({guided:"Guided — plain-language explanations",standard:"Standard — full analyst detail",neutral:"Neutral — raw findings"}[cfg.guidanceMode] || cfg.guidanceMode)
+    : null;
+
+  // Ticker badges — only claim "Holding"/"Watching" when explicitly set in config.
+  // Unknown status shown as "Tracked" (no position claim).
+  var tickerHtml = tickers.map(function(t) {
+    var s = holdings[t];
+    var tag = s === "holding"
+      ? "<span class=\"status-tag holding\">Holding</span>"
+      : s === "watchlist"
+        ? "<span class=\"status-tag watchlist\">Watching</span>"
+        : "<span class=\"status-tag monitored\">Tracked</span>";
+    return "<span class=\"ticker-tag\">" + esc(t) + "</span>" + tag;
+  }).join("  ");
+
+  el.innerHTML =
+    "<div class=\"heading\" style=\"margin-bottom:var(--spacing-s)\">" +
+      "Guided Portfolio Watch" +
+      "<span class=\"demo-badge\">demonstration</span>" +
+    "</div>" +
+    "<p style=\"margin-bottom:var(--spacing-s)\">" + tickerHtml + "</p>" +
+    "<p class=\"note\">" + esc(horizonLabel) +
+    (guidanceLabel ? " &nbsp;·&nbsp; " + esc(guidanceLabel) : "") + "</p>" +
+    "<p class=\"note\" style=\"margin-top:var(--spacing-xs)\">Status labels (Watching / Holding) reflect the configuration and have not been verified against a brokerage account.</p>";
+}
+
+// ── 2. Attention status ───────────────────────────────────────────────────
+async function loadAttentionStatus(cfg) {
+  var el = document.getElementById("attention-status");
+  var guided = cfg.guidanceMode === "guided";
+  try {
+    var rows = await readTimeSeries(HOME + "gpw-monitor/v1/data/analysis/decision/@last/1");
+    if (!rows.length) throw new Error("no records");
+    var d = rows[rows.length - 1];
+
+    var ageMs  = Date.now() - (Number(d.runAtMs) || 0);
+    var stale  = ageMs > 48 * 3600000;
+    var valid  = d.analysisStatus === "valid" && d.healthStatus === "valid" && !stale;
+    var checkedAt = d.runAtMs
+      ? new Date(Number(d.runAtMs)).toLocaleString("en-US", {month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})
+      : "—";
+
+    var html = "";
+    if (!valid) {
+      html = "<p><strong>Monitoring needs attention</strong></p>" +
+        "<p>" + esc(stale ? "The latest check is over 48 hours old." : "The latest check did not complete successfully.") +
+        " Do not interpret silence as assurance that nothing has changed.</p>" +
+        "<p class=\"note\">Checked " + esc(checkedAt) +
+        " &nbsp;·&nbsp; Analysis: " + esc(d.analysisStatus) +
+        " &nbsp;·&nbsp; Data: " + esc(d.healthStatus) + "</p>";
+    } else if ((d.alertDecision || "").toLowerCase() === "alert") {
+      html = md.render(d.notificationMessage || d.reason || "Material events found — see the latest alert below.");
+      html += "<p class=\"note\">Checked " + esc(checkedAt) + "</p>";
+      if (guided) {
+        html += "<p style=\"margin-top:var(--spacing-m)\"><strong>What this means:</strong> " +
+          "Something material has happened with one of your companies. " +
+          "This is worth reading — it may affect the long-term outlook. " +
+          "It does not necessarily mean you need to act immediately.</p>";
+      }
+    } else {
+      var reason = d.reason || d.skipReason || "No developments that affect the long-term outlook were detected today.";
+      html = "<p><strong>Nothing material today</strong></p>" +
+        "<p>" + esc(reason) + "</p>" +
+        "<p class=\"note\">Checked " + esc(checkedAt) + "</p>";
+      if (guided) {
+        html += "<p style=\"margin-top:var(--spacing-m)\"><strong>What this means:</strong> " +
+          "No action is needed. The monitoring system reviewed recent news and found nothing that changes the long-term story for your companies.</p>";
+      }
+    }
+    el.innerHTML = html;
+  } catch(_) {
+    // gpw-monitor not yet running — show honest, non-alarming notice
+    el.innerHTML =
+      "<p><strong>Monitoring temporarily unavailable</strong></p>" +
+      "<p>The automated daily monitoring system is being set up. Once active, this section will show whether any material business events deserve your attention.</p>" +
+      "<p class=\"note\" style=\"margin-top:var(--spacing-m)\">Company financial data is available below. " +
+      "For recent news, visit <a href=\"https://alva.ai/markets\" target=\"_blank\" rel=\"noopener noreferrer\">alva.ai/markets</a>.</p>";
+  }
+}
+
+// ── 3. Companies ──────────────────────────────────────────────────────────
+// Receives pre-loaded snapshot to avoid a second network round-trip.
+function renderCompanies(snap, payload, cfg) {
+  var metaEl   = document.getElementById("companies-meta");
+  var dataEl   = document.getElementById("companies-data");
+  var holdings = cfg.holdings || {};
+  var companies = payload.companies || [];
+
+  if (!companies.length) {
+    metaEl.textContent = "No company data yet — fundamentals feed has not run.";
+    return;
+  }
+
+  // payload.asOf is the original Arrays API retrieval timestamp (unix-ms inside the payload).
+  // snap.asOf reflects when the snapshot record was written, which may include later config patches.
+  // Always use payload.asOf so the label shows when the financial data was actually fetched.
+  var retrievedAt = parseAsOf(payload.asOf || snap.asOf || snap.date);
+  var retrievedStr = retrievedAt
+    ? retrievedAt.toLocaleString("en-US", {month:"short",day:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"})
+    : "—";
+  metaEl.textContent = "Financial data retrieved " + retrievedStr + " \u00b7 Source: Arrays financial data";
+
+  dataEl.innerHTML = companies.map(function(c) {
+    // c.income  = FY-only records (pre-filtered by fundamentals feed, sorted desc)
+    // c.incomeQ = quarterly-only records (pre-filtered by fundamentals feed, sorted desc, max 8)
+    var income   = c.income   || [];
+    var incomeQ  = c.incomeQ  || [];
+    var cashflow = c.cashflow || [];
+    var balance  = c.balance  || [];
+
+    var q  = latestQ(incomeQ);  // latest quarter — uses c.incomeQ, not c.income
+    var fy = latestFY(income);  // latest fiscal year (c.income is FY-only)
+
+    // Latest non-FY balance row — independent of income quarter (balance data may be more current).
+    var bq = balance.filter(function(r) { return r.period !== "FY"; }).sort(byDateDesc)[0] || null;
+
+      // Status chip — only show if explicitly set in config
+      var statusKey  = holdings[c.symbol] || null;
+      var chipClass  = statusKey === "holding" ? "holding" : statusKey === "watchlist" ? "watchlist" : "monitored";
+      var chipLabel  = statusKey === "holding" ? "Holding" : statusKey === "watchlist" ? "Watching" : "Monitored";
+
+      // Last 4 fiscal years for history table
+      var fyRows = income.slice().sort(byDateDesc).slice(0, 4); // c.income is FY-only
+
+      // Staleness: quarterly income data older than 540 days (~18 months) is not "latest".
+      // Balance sheet data is typically more current — shown independently with its own date.
+      var STALE_MS  = 540 * 86400000;
+      var qAgeMs    = q ? Date.now() - Date.parse(q.calendar_end_date) : Infinity;
+      var qIsStale  = qAgeMs > STALE_MS;
+
+      // Primary panel: show the most current income data.
+      // If quarterly data is stale, show the latest annual FY figure instead.
+      var primarySection = "";
+      if (fy) {
+        if (q && !qIsStale) {
+          // Current quarterly — show as primary
+          primarySection =
+            "<div class=\"panel\" style=\"margin-top:var(--spacing-m)\">" +
+            "<p style=\"font-size:14px;font-weight:500;margin-bottom:var(--spacing-m)\">" +
+              "Latest reported quarter &nbsp;·&nbsp; FY" + esc(q.fiscal_year) + " " + esc(q.period) +
+              " &nbsp;·&nbsp; ended " + esc(q.calendar_end_date) +
+              (q.reported_currency ? " &nbsp;·&nbsp; " + esc(q.reported_currency) : "") +
+            "</p>" +
+            "<div class=\"metric-row\">" +
+              "<div><p class=\"note\">Sales (revenue)</p><div class=\"metric-value\">" + bn(q.revenue) + "</div><p class=\"note\">Gross margin " + pct(q.gross_profit_ratio) + "</p></div>" +
+              "<div><p class=\"note\">Profit after expenses</p><div class=\"metric-value\">" + bn(q.net_income) + "</div><p class=\"note\">EPS (diluted) " + esc(q.eps_diluted) + "</p></div>" +
+              "<div><p class=\"note\">Operating margin</p><div class=\"metric-value\">" + pct(q.operating_profit_ratio) + "</div></div>" +
+            "</div>" +
+            "<p class=\"note\" style=\"margin-top:var(--spacing-m)\">Filed " + esc(q.filing_date || "—") +
+              " · Period ended " + Math.floor(qAgeMs / 86400000) + " days ago.</p>" +
+            "</div>";
+        } else {
+          // Stale quarterly — show latest annual FY as primary
+          var cfFy = cashflow.filter(function(x) {
+            return x.period === fy.period && x.fiscal_year === fy.fiscal_year && x.calendar_end_date === fy.calendar_end_date;
+          })[0] || {};
+          primarySection =
+            "<div class=\"panel\" style=\"margin-top:var(--spacing-m)\">" +
+            "<p style=\"font-size:14px;font-weight:500;margin-bottom:var(--spacing-m)\">" +
+              "Latest fiscal year &nbsp;·&nbsp; FY" + esc(fy.fiscal_year) +
+              " &nbsp;·&nbsp; ended " + esc(fy.calendar_end_date) +
+              (fy.reported_currency ? " &nbsp;·&nbsp; " + esc(fy.reported_currency) : "") +
+            "</p>" +
+            "<div class=\"metric-row\">" +
+              "<div><p class=\"note\">Revenue (annual)</p><div class=\"metric-value\">" + bn(fy.revenue) + "</div><p class=\"note\">Gross margin " + pct(fy.gross_profit_ratio) + "</p></div>" +
+              "<div><p class=\"note\">Net income (annual)</p><div class=\"metric-value\">" + bn(fy.net_income) + "</div><p class=\"note\">EPS diluted " + esc(fy.eps_diluted) + "</p></div>" +
+              "<div><p class=\"note\">Free cash flow</p><div class=\"metric-value\">" + bn(cfFy.free_cash_flow) + "</div><p class=\"note\">Operating CF " + bn(cfFy.operating_cash_flow) + "</p></div>" +
+            "</div>" +
+            (q ? "<p class=\"note\" style=\"margin-top:var(--spacing-m)\">Quarterly income data available to FY" + esc(q.fiscal_year) + " " + esc(q.period) + " / " + esc(q.calendar_end_date) + " — see history below.</p>" : "") +
+            "</div>";
+        }
+      }
+
+      // Details: annual history table, balance sheet, stale quarterly note
+      var historySection = "";
+      if (fyRows.length) {
+        var tableRows = fyRows.map(function(r) {
+          var cfRow = cashflow.filter(function(x) {
+            return x.period === r.period && x.fiscal_year === r.fiscal_year && x.calendar_end_date === r.calendar_end_date;
+          })[0] || {};
+          return "<tr>" +
+            "<td>FY" + esc(r.fiscal_year) + " / " + esc(r.calendar_end_date) + "</td>" +
+            "<td>" + bn(r.revenue) + "</td>" +
+            "<td>" + bn(r.net_income) + "</td>" +
+            "<td>" + bn(cfRow.operating_cash_flow) + "</td>" +
+            "<td>" + bn(cfRow.free_cash_flow) + "</td>" +
+          "</tr>";
+        }).join("");
+
+        var balanceSection = "";
+        if (bq) {
+          balanceSection =
+            "<p style=\"font-size:13px;font-weight:500;margin:var(--spacing-l) 0 var(--spacing-s)\">Balance sheet &nbsp;·&nbsp; FY" + esc(bq.fiscal_year) + " " + esc(bq.period) + " / " + esc(bq.calendar_end_date) + "</p>" +
+            "<div class=\"metric-row\" style=\"font-size:14px\">" +
+              "<div><p class=\"note\">Cash &amp; short investments</p><div style=\"font-size:18px;margin:4px 0\">" + bn(bq.cash_and_short_term_investments) + "</div></div>" +
+              "<div><p class=\"note\">Total debt</p><div style=\"font-size:18px;margin:4px 0\">" + bn(bq.total_debt) + "</div></div>" +
+              "<div><p class=\"note\">Equity</p><div style=\"font-size:18px;margin:4px 0\">" + bn(bq.total_stockholders_equity) + "</div></div>" +
+            "</div>" +
+            "<p class=\"note\">No solvency rating is inferred from these figures.</p>";
+        }
+
+        historySection =
+          "<details style=\"margin-top:var(--spacing-m)\">" +
+          "<summary>Annual financial history &amp; balance sheet</summary>" +
+          "<p class=\"note\" style=\"margin:var(--spacing-s) 0 var(--spacing-m)\">B&nbsp;= billion. Annual fiscal year data sorted newest first. Cash flows reported annually.</p>" +
+          "<div class=\"widget-card col-8\" style=\"margin-top:var(--spacing-m)\">" +
+            "<div class=\"widget-title\"><span class=\"widget-title-text\">Annual revenue &amp; profit · " + esc((fy || {}).reported_currency || "") + " billions</span></div>" +
+            "<div style=\"padding:var(--spacing-m);overflow-x:auto\">" +
+              "<table class=\"fin-table\">" +
+                "<thead><tr><th>Fiscal year / end</th><th>Revenue</th><th>Net income</th><th>Operating CF</th><th>Free CF</th></tr></thead>" +
+                "<tbody>" + tableRows + "</tbody>" +
+              "</table>" +
+              "<p class=\"note\" style=\"margin-top:var(--spacing-s)\">FY = full fiscal year ending on the stated calendar date.</p>" +
+            "</div>" +
+          "</div>" +
+          balanceSection +
+          "</details>";
+      }
+
+      return (
+        "<div class=\"section\">" +
+        "<div class=\"company-title\">" +
+          "<a href=\"https://alva.ai/markets/" + esc(c.symbol) + "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
+            esc(c.name) + " &nbsp;·&nbsp; " + esc(c.symbol) +
+          "</a>" +
+          " <span class=\"status-tag " + chipClass + "\">" + esc(chipLabel) + "</span>" +
+        "</div>" +
+        "<p class=\"note\">" +
+          esc(c.exchange || "—") +
+          (c.sector   ? " &nbsp;·&nbsp; " + esc(c.sector)   : "") +
+          (c.industry ? " &nbsp;·&nbsp; " + esc(c.industry) : "") +
+        "</p>" +
+        primarySection +
+        historySection +
+        "</div>"
+      );
+    }).join("");
+}
+
+// ── 2. Portfolio insights (YoY) ───────────────────────────────────────────
+// Calculation logic inlined from src/yoy-insights.js (no require() in browser).
+// Labeling contract:
+//   Metric rows    — FACTUAL: computed directly from filed financial statements.
+//   "Observation:" — FACTUAL: consequence of the metrics with a defined rationale.
+//   "Context:"     — INTERPRETIVE: labeled explicitly; no events or predictions fabricated.
+
+var INSIGHT_STALE_FY_MS = 540 * 86400000;
+
+var INDUSTRY_WATCH_MAP = {
+  "semiconductors":       "product cycles, data-center demand, export restrictions, and supply constraints",
+  "auto manufacturers":   "unit deliveries, pricing power, gross margin trends, and EV adoption pace",
+  "auto - manufacturers": "unit deliveries, pricing power, gross margin trends, and EV adoption pace",
+  "consumer electronics": "device demand, services attach rate, supply chain, and installed base growth",
+};
+var WATCH_FALLBACK_TEXT = "revenue growth, margin trends, and business-specific developments";
+
+function insightCalcYoY(cur, pri) {
+  if (typeof cur !== "number" || typeof pri !== "number") return null;
+  if (pri === 0) return null;
+  return (cur - pri) / Math.abs(pri);
+}
+
+function insightMatchCf(cfArr, row) {
+  if (!cfArr || !row) return null;
+  return cfArr.find(function(c) {
+    return c.period === row.period && c.fiscal_year === row.fiscal_year && c.calendar_end_date === row.calendar_end_date;
+  }) || cfArr.find(function(c) {
+    return c.period === row.period && c.fiscal_year === row.fiscal_year;
+  }) || null;
+}
+
+function insightSignal(revYoY, niYoY, fcfYoY) {
+  var sc = [];
+  if (revYoY !== null) sc.push(revYoY >  0.01 ?  1 : revYoY < -0.01 ? -1 : 0);
+  if (niYoY  !== null) sc.push(niYoY  >  0.01 ?  1 : niYoY  < -0.01 ? -1 : 0);
+  if (!sc.length) return "insufficient";
+  var t = sc.reduce(function(a, b) { return a + b; }, 0);
+  var plSignal = t === sc.length ? "improving" : t === -sc.length ? "declining" : "mixed";
+  // FCF qualifier: a meaningful FCF decline (>5%) alongside improving P&L signals mixed results.
+  if (plSignal === "improving" && typeof fcfYoY === "number" && fcfYoY < -0.05) {
+    return "mixed";
+  }
+  return plSignal;
+}
+
+function fmtYoyStr(yoy) {
+  if (yoy === null) return null;
+  var p = yoy * 100;
+  return (p >= 0 ? "+" : "\u2212") + Math.abs(p).toFixed(1) + "%";
+}
+
+function fmtBnStr(x) {
+  if (typeof x !== "number") return null;
+  return "$" + (x / 1e9).toFixed(1) + "B";
+}
+
+function metricHtml(label, cur, yoy) {
+  var curStr = fmtBnStr(cur) || "\u2014";
+  var yoyStr = fmtYoyStr(yoy);
+  var changeHtml = yoyStr
+    ? "<div class=\"insight-metric-change " + (yoy >= 0 ? "yoy-up" : "yoy-dn") + "\">" + esc(yoyStr) + " vs prior year</div>"
+    : "<div class=\"insight-metric-change note\">prior year unavailable</div>";
+  return "<div class=\"insight-metric\">" +
+    "<div class=\"insight-metric-label\">" + esc(label) + "</div>" +
+    "<div class=\"insight-metric-value\">" + esc(curStr) + "</div>" +
+    changeHtml +
+    "</div>";
+}
+
+function insightObservation(signal, revYoY, niYoY, fcfYoY, cf0, cf1, guided) {
+  // All statements here are factual observations from filed data or explicitly labeled.
+  // obs / ctx: preserved for test compatibility (ctx includes "Context (interpretation):" prefix).
+  // whatHappened / watchNext: new fields used by guided-mode card rendering.
+  var obs = "";
+  var ctx = "";
+  var whatHappened = "";
+  var watchNext = "";
+
+  if (signal === "improving") {
+    obs = "Revenue and net income both grew year-over-year (from filed statements). " +
+      "The company collected more in sales and earned more in profit simultaneously.";
+    whatHappened = "The company brought in more from customers and earned more profit compared to the previous fiscal year.";
+    if (fcfYoY !== null && fcfYoY > 0) {
+      whatHappened += " Free cash flow also increased.";
+    }
+    if (guided) {
+      ctx = "Context (interpretation): Growing sales alongside growing profit can indicate the business is scaling efficiently. " +
+        "Whether this continues depends on factors not visible in these statements alone.";
+    }
+    watchNext = (revYoY !== null && revYoY > 0.3)
+      ? "Watch whether this high growth rate sustains in the next annual filing, or moderates as the initial demand cycle matures — and whether free cash flow keeps pace."
+      : "Watch whether both sales and profit continue growing in the next annual filing, and whether free cash flow tracks the same direction as stated profit.";
+  } else if (signal === "declining") {
+    obs = "Both revenue and net income declined year-over-year (from filed statements).";
+    whatHappened = "The company brought in less from customers and earned less profit compared to the previous fiscal year.";
+    // Note any FCF improvement alongside the P&L decline — factual decomposition only.
+    if (fcfYoY !== null && fcfYoY > 0.05 && cf0 && cf1) {
+      var capexCur = cf0.capital_expenditure;
+      var capexPri = cf1.capital_expenditure;
+      var ocfCur   = cf0.operating_cash_flow;
+      var ocfPri   = cf1.operating_cash_flow;
+      var capexDelta = (typeof capexCur === "number" && typeof capexPri === "number")
+        ? capexCur - capexPri : null;
+      // capexDelta > 0 means capex became less negative (spending decreased)
+      if (capexDelta !== null && capexDelta > 0
+          && typeof ocfCur === "number" && typeof ocfPri === "number") {
+        obs += " Free cash flow improved (" + fmtYoyStr(fcfYoY) + ") — " +
+          "capital expenditure decreased from " + fmtBnStr(Math.abs(capexPri)) +
+          " to " + fmtBnStr(Math.abs(capexCur)) +
+          " while operating cash flow was " + fmtBnStr(ocfCur) +
+          " vs " + fmtBnStr(ocfPri) + " prior year" +
+          " (from the filed cash flow statement).";
+        whatHappened += " However, free cash flow increased — capital expenditure decreased from " +
+          fmtBnStr(Math.abs(capexPri)) + " to " + fmtBnStr(Math.abs(capexCur)) + " (from the filed cash flow statement).";
+        watchNext = "Watch whether free cash flow continues to improve even if sales recover slowly, and check for company guidance on what drove the profit decline.";
+      } else {
+        obs += " Free cash flow improved (" + fmtYoyStr(fcfYoY) + ")" +
+          " — a divergence visible in the filed cash flow statement.";
+        whatHappened += " Free cash flow improved — a divergence visible in the filed cash flow statement.";
+        watchNext = "Watch whether free cash flow improvement continues alongside any recovery in sales.";
+      }
+    } else {
+      watchNext = "Watch for any recovery in sales or profit in the next annual filing, and check whether the company has explained the cause in its annual report or earnings guidance.";
+    }
+    if (guided) {
+      ctx = "Context (interpretation): Declining sales and profit warrant closer attention, but do not by themselves mean a permanent problem. The cause — and whether management is addressing it — matters for a long-term view.";
+    }
+  } else if (signal === "mixed") {
+    var fcfMentioned = false;
+    if (revYoY !== null && niYoY !== null) {
+      var plBothUp = revYoY > 0.01 && niYoY > 0.01;
+      if (plBothUp && fcfYoY !== null && fcfYoY < -0.05) {
+        // AAPL-like: P&L both grew but FCF declined
+        obs = "Revenue and net income both grew year-over-year (from filed statements). " +
+          "Free cash flow declined (" + fmtYoyStr(fcfYoY) + ") — " +
+          "a divergence visible in the filed cash flow statement.";
+        whatHappened = "Sales and profit both increased, but free cash flow — cash remaining after capital spending — decreased compared to the previous year.";
+        fcfMentioned = true;
+        watchNext = "Watch whether free cash flow recovers in the next annual filing, and whether the company explains the divergence between stated profit and free cash flow in its guidance.";
+        if (guided) {
+          ctx = "Context (interpretation): When profit grows but free cash flow falls, it can reflect increased capital spending or changes in how the business collects payment. The annual history shows whether this is a new pattern.";
+        }
+      } else if (revYoY > 0.01 && niYoY < -0.01) {
+        obs = "Revenue grew but net income declined (from filed statements). " +
+          "This can reflect higher costs, increased investment, or one-time accounting items.";
+        whatHappened = "The company brought in more from customers but earned less profit after all expenses.";
+        watchNext = "Watch whether costs stabilise in the next period, and check the company's guidance on whether the profit decline was a one-time event or an ongoing trend.";
+        if (guided) {
+          ctx = "Context (interpretation): Rising costs, new investments, or one-time items can all reduce profit even as sales grow. The annual history table shows whether this is a recent change.";
+        }
+      } else if (revYoY < -0.01 && niYoY > 0.01) {
+        obs = "Net income grew despite declining revenue (from filed statements). " +
+          "This can reflect cost reductions, favorable mix, or one-time items.";
+        whatHappened = "The company earned more profit despite bringing in less from customers.";
+        watchNext = "Watch whether revenue recovers in the next filing — sustained profit without sales growth can reflect cost-cutting rather than a strengthening business.";
+        if (guided) {
+          ctx = "Context (interpretation): Profit without revenue growth can reflect cost-cutting or one-time gains rather than a strengthening business. The annual history shows the longer pattern.";
+        }
+      } else {
+        obs = "Revenue and net income showed mixed results year-over-year (from filed statements).";
+        whatHappened = "Sales and profit moved in different directions compared to the previous year.";
+        watchNext = "Watch whether the diverging trends resolve in the same direction in the next annual filing.";
+        if (guided) {
+          ctx = "Context (interpretation): Diverging metrics are not unusual and often reflect investment decisions or timing. The annual history below shows the longer pattern.";
+        }
+      }
+    } else if (revYoY !== null) {
+      obs = revYoY > 0.01
+        ? "Revenue grew year-over-year (from filed statements); net income data unavailable."
+        : "Revenue declined year-over-year (from filed statements); net income data unavailable.";
+      whatHappened = revYoY > 0.01
+        ? "The company brought in more from customers compared to the previous year."
+        : "The company brought in less from customers compared to the previous year.";
+      watchNext = "Watch for net income data in the next annual filing to assess profitability alongside sales.";
+    } else if (niYoY !== null) {
+      obs = niYoY > 0.01
+        ? "Net income grew year-over-year (from filed statements); revenue data unavailable."
+        : "Net income declined year-over-year (from filed statements); revenue data unavailable.";
+      whatHappened = niYoY > 0.01
+        ? "The company earned more profit compared to the previous year."
+        : "The company earned less profit compared to the previous year.";
+      watchNext = "Watch for revenue data in the next annual filing for a complete picture.";
+    }
+    // For cases where FCF diverged from revenue but wasn't already covered above
+    if (!fcfMentioned && fcfYoY !== null && revYoY !== null
+        && Math.sign(fcfYoY) !== Math.sign(revYoY)) {
+      obs += " Free cash flow moved in the opposite direction to revenue (" +
+        fmtYoyStr(fcfYoY) + ") — visible in the cash flow statement.";
+    }
+    if (!guided) ctx = "";
+  } else if (signal === "insufficient") {
+    obs = "Insufficient data to compute year-over-year comparison.";
+    whatHappened = "Not enough financial data is available to compare this year to the previous year.";
+    watchNext = "";
+  }
+
+  return { obs: obs, ctx: ctx, whatHappened: whatHappened, watchNext: watchNext };
+}
+
+function renderInsightsSection(payload, cfg) {
+  var metaEl = document.getElementById("insights-meta");
+  var dataEl = document.getElementById("insights-data");
+  var companies = payload.companies || [];
+  var guided = cfg.guidanceMode === "guided";
+
+  if (!companies.length) {
+    metaEl.textContent = "No company data available.";
+    return;
+  }
+
+  metaEl.innerHTML = "Year-over-year comparison from filed financial statements \u00b7 FY annual figures" +
+    " &nbsp;\u00b7&nbsp; <span class=\"note\">Improving / Declining / Mixed describe year-over-year metric trends \u2014 not investment ratings or recommendations.</span>";
+
+  dataEl.innerHTML = companies.map(function(c) {
+    var income   = (c.income   || []).slice().sort(byDateDesc);
+    var cashflow = (c.cashflow || []).slice().sort(byDateDesc);
+
+    var fy0 = income[0] || null;
+
+    if (!fy0) {
+      return "<div class=\"insight-card\"><p class=\"note\">" + esc(c.symbol) + " — no financial data available.</p></div>";
+    }
+
+    // Prior year: must be exactly one fiscal year before fy0 (consecutive-year enforcement).
+    // Using income[1] directly would silently compare e.g. FY2026 vs FY2024 when FY2025 is absent.
+    var fy0Yr = parseInt(fy0.fiscal_year, 10);
+    var fy1 = null;
+    if (!isNaN(fy0Yr)) {
+      for (var _fyi = 1; _fyi < income.length; _fyi++) {
+        if (parseInt(income[_fyi].fiscal_year, 10) === fy0Yr - 1) {
+          fy1 = income[_fyi];
+          break;
+        }
+      }
+    }
+    var hasGap = !fy1 && income.length > 1;
+
+    var cf0 = insightMatchCf(cashflow, fy0);
+    var cf1 = fy1 ? insightMatchCf(cashflow, fy1) : null;
+
+    var revYoY = fy1 ? insightCalcYoY(fy0.revenue,   fy1.revenue)   : null;
+    var niYoY  = fy1 ? insightCalcYoY(fy0.net_income, fy1.net_income) : null;
+    var fcfCur = cf0 ? cf0.free_cash_flow : null;
+    var fcfPri = cf1 ? cf1.free_cash_flow : null;
+    var fcfYoY = (fcfCur !== null && fcfPri !== null) ? insightCalcYoY(fcfCur, fcfPri) : null;
+
+    var signal = fy1 ? insightSignal(revYoY, niYoY, fcfYoY) : "insufficient";
+
+    var periodLabel = fy1
+      ? "FY" + esc(fy1.fiscal_year) + " \u2192 FY" + esc(fy0.fiscal_year)
+      : "FY" + esc(fy0.fiscal_year || "\u2014");
+
+    var watchKey  = (c.industry || "").toLowerCase();
+    var watchText = INDUSTRY_WATCH_MAP[watchKey] || WATCH_FALLBACK_TEXT;
+
+    var txt;
+    if (fy1) {
+      txt = insightObservation(signal, revYoY, niYoY, fcfYoY, cf0, cf1, guided);
+    } else if (hasGap) {
+      txt = { obs: "Fiscal year gap detected \u2014 FY" + esc(String(fy0Yr - 1)) +
+        " data is unavailable. Year-over-year percentages are not shown to avoid displaying a multi-year comparison as an annual change.", ctx: "",
+        whatHappened: "A gap in the available data prevents a year-over-year comparison for this period.", watchNext: "" };
+    } else {
+      txt = { obs: "Only one year of financial data available \u2014 year-over-year comparison requires two consecutive fiscal years.", ctx: "",
+        whatHappened: "Only one year of financial data is available — a second year is needed for comparison.", watchNext: "" };
+    }
+
+    var signalTag = {
+      improving:    "<span style=\"color:var(--green-n7,#27ae60);font-weight:500\">&#x25b2; Improving</span>",
+      declining:    "<span style=\"color:var(--text-n5);font-weight:500\">&#x25bc; Declining</span>",
+      mixed:        "<span style=\"color:var(--text-n5);font-weight:500\">&#x25ba; Mixed</span>",
+      single_year:  "<span style=\"color:var(--text-n5)\">Single year</span>",
+      insufficient: "<span style=\"color:var(--text-n5)\">Insufficient data</span>",
+    }[signal] || "";
+
+    // ctx contains "Context (interpretation):" prefix — strip it for display under "Why does it matter?"
+    var whyText = txt.ctx ? txt.ctx.replace("Context (interpretation): ", "") : "";
+
+    var cardHtml;
+    if (guided && txt.whatHappened) {
+      // ── Guided mode: four-section hierarchy ──────────────────────────────
+      cardHtml =
+        "<div class=\"insight-card\">" +
+        "<div class=\"insight-card-head\">" +
+          esc(c.symbol) + " &nbsp;\u00b7&nbsp; " + periodLabel +
+          " &nbsp;&nbsp;" + signalTag +
+        "</div>" +
+        "<span class=\"insight-section-label\">What happened?</span>" +
+        "<p class=\"insight-text\">" + esc(txt.whatHappened) + "</p>" +
+        (whyText
+          ? "<span class=\"insight-section-label\">Why does it matter?</span>" +
+            "<p class=\"insight-text\" style=\"color:var(--text-n5)\">" + esc(whyText) + "</p>"
+          : "") +
+        "<span class=\"insight-section-label\">Supporting numbers \u00b7 from filed statements</span>" +
+        "<div class=\"insight-metrics\">" +
+          metricHtml("Total sales (revenue)",       fy0.revenue,    revYoY) +
+          metricHtml("Profit after costs (net income)", fy0.net_income, niYoY) +
+          metricHtml("Cash generated (free cash flow)", fcfCur,         fcfYoY) +
+        "</div>" +
+        (txt.watchNext
+          ? "<span class=\"insight-section-label\">What should I watch next?</span>" +
+            "<p class=\"insight-watch\">" + esc(txt.watchNext) + "</p>"
+          : "") +
+        "</div>";
+    } else {
+      // ── Neutral mode: compact layout ─────────────────────────────────────
+      cardHtml =
+        "<div class=\"insight-card\">" +
+        "<div class=\"insight-card-head\">" +
+          esc(c.symbol) + " &nbsp;\u00b7&nbsp; " + periodLabel +
+          " &nbsp;&nbsp;" + signalTag +
+        "</div>" +
+        "<div class=\"insight-metrics\">" +
+          metricHtml("Revenue",        fy0.revenue,    revYoY) +
+          metricHtml("Net income",     fy0.net_income, niYoY) +
+          metricHtml("Free cash flow", fcfCur,         fcfYoY) +
+        "</div>" +
+        (txt.obs ? "<p class=\"insight-text\">" + esc(txt.obs) + "</p>" : "") +
+        "<p class=\"insight-watch\"><strong>Watch for " + esc(c.industry || c.sector || "this company") + ":</strong> " + esc(watchText) + ".</p>" +
+        "</div>";
+    }
+    return cardHtml;
+  }).join("");
+}
+
+// ── 5. Latest alert ───────────────────────────────────────────────────────
+async function loadAlert(cfg) {
+  var section = document.getElementById("alert-section");
+  var bodyEl  = document.getElementById("alert-body");
+  var guided  = cfg.guidanceMode === "guided";
+
+  try {
+    var eventId = new URLSearchParams(location.search).get("event");
+    var rows = await readTimeSeries(
+      HOME + "gpw-monitor/v1/data/alerts/daily/@last/" + (eventId ? "30" : "1")
+    );
+    if (!rows.length) return; // no alerts — section stays hidden
+
+    var alert;
+    if (eventId) {
+      // Deep link: find the specific alert by stable event ID
+      var reversed = rows.slice().reverse();
+      for (var i = 0; i < reversed.length; i++) {
+        var a = reversed[i];
+        if (a && a.eventIds) {
+          var ids = String(a.eventIds).split(",").map(function(s) { return s.trim(); });
+          if (ids.indexOf(eventId) !== -1) { alert = a; break; }
+        }
+      }
+    }
+    if (!alert) alert = rows[rows.length - 1];
+    if (!alert || !alert.body) return;
+
+    section.style.display = "";
+
+    var html = "";
+    if (eventId && alert.date) {
+      var dStr = new Date(Number(alert.date)).toLocaleDateString("en-US", {month:"long",day:"numeric",year:"numeric"});
+      html += "<p class=\"note\" style=\"margin-bottom:var(--spacing-m)\">Showing alert from " + esc(dStr) + " linked from your notification.</p>";
+    }
+    if (guided) {
+      html += "<p class=\"note\" style=\"margin-bottom:var(--spacing-m)\">The sections below explain what happened and why it matters in plain English. Sources are linked so you can read the original reporting.</p>";
+    }
+    html += md.render(String(alert.body));
+    bodyEl.innerHTML = html;
+
+  } catch(_) {
+    // No alert data — section stays hidden. Not an error.
+  }
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────
+// Fundamentals snapshot is the single public data source for overview + companies.
+// gpw-monitor sections (attention, alert) fail gracefully when unavailable.
+(async function() {
+  var snapshot;
+  try {
+    snapshot = await loadFundamentalsSnapshot();
+  } catch(e) {
+    document.getElementById("portfolio-header").innerHTML =
+      "<p class=\"note\">Portfolio data unavailable — " + esc(e.message) + "</p>";
+    document.getElementById("companies-meta").textContent =
+      "Company data could not be loaded: " + e.message;
+    return;
+  }
+
+  var snap    = snapshot.snap;
+  var payload = snapshot.payload;
+  var cfg     = snapshot.cfg;
+
+  renderSectionHeadings(cfg);
+  renderPortfolioOverview(cfg);
+  try { renderInsightsSection(payload, cfg); }
+  catch(e) { document.getElementById("insights-meta").textContent = "Insights unavailable: " + e.message; }
+  try { renderCompanies(snap, payload, cfg); }
+  catch(e) { document.getElementById("companies-meta").textContent = "Company data error: " + e.message; }
+
+  // gpw-monitor sections load independently — failures show graceful notices.
+  await Promise.all([
+    loadAttentionStatus(cfg),
+    loadAlert(cfg),
+  ]);
+})().catch(function(e) { console.error("Playbook boot error:", e); });
+</script>
+</body>
+</html>

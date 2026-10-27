@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "config": {
+    "tickers": ["NVDA", "AMD"],
+    "holdings": { "NVDA": "watchlist", "AMD": "watchlist" },
+    "guidanceMode": "neutral",
+    "horizon": "long-term"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "guided-portfolio-watch/monitoring-config",
+  "title": "MonitoringConfig",
+  "description": "Runtime source of truth for the Guided Portfolio Watch Skill. Written to ALFS at ~/feeds/gpw-monitor/v1/config.json. Read by gpw-monitor and gpw-fundamentals feed scripts at cloud runtime.",
+  "type": "object",
+  "required": ["version", "tickers", "holdings", "horizon", "guidanceMode", "preferencesNote", "createdAt", "updatedAt"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version (semver).",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0"]
+    },
+    "tickers": {
+      "type": "array",
+      "description": "US-listed equity or ETF symbols, uppercase. Source of truth for what both feeds monitor.",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{1,5}(\\.[A-Z])?$"
+      },
+      "minItems": 1,
+      "maxItems": 15,
+      "uniqueItems": true
+    },
+    "holdings": {
+      "type": "object",
+      "description": "Per-ticker ownership classification. Affects alert prose language only.",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["holding", "watchlist"]
+      }
+    },
+    "horizon": {
+      "type": "string",
+      "description": "Investment horizon. Controls alert policy and preferencesNote framing.",
+      "enum": ["long-term", "medium-term"]
+    },
+    "guidanceMode": {
+      "type": "string",
+      "description": "Communication preference, inferred from user intent. Not a claim about expertise. guided = plain language + definitions. standard = financial terminology accepted. neutral = accessible but not condescending.",
+      "enum": ["guided", "standard", "neutral"]
+    },
+    "weights": {
+      "type": "object",
+      "description": "Optional illustrative allocation weights (user-provided scenario; not verified live data). Values are fractions (0–1). Sum must be 1.0 ± 0.02.",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "sectorFocusAreas": {
+      "type": "object",
+      "description": "Per-ticker one-sentence monitoring focus, derived from sector/industry at setup time. Never invented — uses generic fallback if sector unknown.",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "preferencesNote": {
+      "type": "string",
+      "description": "Assembled prose passed verbatim to @alva/portfolio-watch as portfolioWatchPreferencesNote. Built deterministically from the other fields; never LLM-generated.",
+      "minLength": 50
+    },
+    "rejectedTickers": {
+      "type": "array",
+      "description": "Symbols from user input that were rejected (crypto, options, non-US format, common-word blocklist). Stored for transparency; not used by feed scripts.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "reason"],
+        "properties": {
+          "symbol": { "type": "string" },
+          "reason": {
+            "type": "string",
+            "enum": ["crypto_pattern", "non_us_format", "common_word_blocklist", "too_long", "invalid_chars"]
+          }
+        }
+      }
+    },
+    "weightsNormalized": {
+      "type": "boolean",
+      "description": "True if user-provided weights were normalized because they did not sum to exactly 1.0."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp when this config was first created."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp when this config was last modified."
+    }
+  }
+}

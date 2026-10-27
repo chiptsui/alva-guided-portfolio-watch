@@ -1,0 +1,10 @@
+{
+  "_comment": "Symbols not in COMPANY_NAMES and not in any blocklist pass through as valid tickers. The system cannot verify exchange listing — it accepts any plausible US equity symbol format.",
+  "ok": true,
+  "config": {
+    "tickers": ["PLBY", "GOOG"],
+    "holdings": { "PLBY": "holding", "GOOG": "holding" },
+    "guidanceMode": "neutral",
+    "horizon": "long-term"
+  }
+}

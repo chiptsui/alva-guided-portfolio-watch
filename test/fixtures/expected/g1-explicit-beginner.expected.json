@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "config": {
+    "guidanceMode": "guided",
+    "tickers": ["AAPL", "MSFT"],
+    "holdings": { "AAPL": "holding", "MSFT": "holding" },
+    "horizon": "long-term"
+  }
+}

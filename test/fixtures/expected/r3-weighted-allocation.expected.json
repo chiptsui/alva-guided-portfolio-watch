@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "config": {
+    "tickers": ["NVDA", "TSLA", "AAPL"],
+    "horizon": "long-term",
+    "holdings": { "NVDA": "holding", "TSLA": "holding", "AAPL": "holding" },
+    "weights": { "NVDA": 0.5, "TSLA": 0.3, "AAPL": 0.2 }
+  }
+}

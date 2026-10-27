@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "config": {
+    "tickers": ["MSFT", "JPM", "XOM"],
+    "holdings": {
+      "MSFT": "watchlist",
+      "JPM": "watchlist",
+      "XOM": "watchlist"
+    },
+    "horizon": "long-term",
+    "guidanceMode": "guided"
+  }
+}

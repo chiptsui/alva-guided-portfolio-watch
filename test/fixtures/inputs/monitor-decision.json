@@ -1,0 +1,134 @@
+{
+  "__comment": "Sanitized fixture derived from real production decision output (run 48637368, 2026-10-26).",
+  "__warning": "Do not send this payload to any production notification channel.",
+
+  "real_push_decision": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "SpaceX's reported $40 billion debt financing for GPUs is a new, potentially material forward-demand signal for NVDA's AI infrastructure exposure, although purchase timing and economics remain unconfirmed.",
+    "skipReason": "",
+    "notificationMessage": "NVDA: Elon Musk said SpaceX closed $40 billion of debt financing for GPUs, creating a potentially meaningful forward-demand signal for AI infrastructure. It does not establish near-term NVDA revenue, but it reinforces the role of financed capacity in the demand outlook; monitor procurement timing, financing terms, and subsequent customer disclosures.",
+    "runAtMs": 1793008205356,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-spacex-gpu-financing-nvda\",\"findingType\":\"event_impact\",\"primaryAsset\":\"NVDA\",\"status\":\"selected\",\"selected\":true,\"summary\":\"SpaceX reportedly closed $40 billion in debt financing for GPUs, adding a potentially significant but not yet contracted forward-demand signal for NVDA's AI infrastructure ecosystem.\",\"suppressionReason\":\"\",\"supportingEvents\":[],\"eventRefs\":[\"event:portfolio-news:title:musk-says-spacex-raised-40-billion-in-debt-for-gpus:20751\"],\"dataQualityNotes\":[\"The report identifies GPU financing but does not provide verified vendor allocation, order size, delivery timing, or revenue impact.\"],\"payload\":{\"affected_buckets\":[\"ai-infrastructure\",\"semiconductors\",\"data-center\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"The financing supports the forward demand backdrop for GPU infrastructure, but does not confirm orders, timing, or revenue recognition for NVDA.\"},\"risk_direction\":{\"direction\":\"mixed\",\"risk_bucket\":\"AI infrastructure demand financing\",\"rationale\":\"Financed demand can support orders, while raising the importance of customer funding capacity.\"},\"watch_next\":[\"Confirm procurement timing and vendor allocation\",\"Monitor NVDA order announcements related to SpaceX\",\"Track SpaceX GPU deployment milestones\"]},\"data_quality_notes\":[\"The report identifies GPU financing but does not provide verified vendor allocation, order size, delivery timing, or revenue impact.\"]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-spacex-gpu-financing-nvda\"]"
+  },
+
+  "push_with_sources": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "AAPL regulatory fine with confirmed external coverage.",
+    "skipReason": "",
+    "notificationMessage": "",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-aapl-regulatory-fine\",\"findingType\":\"event_impact\",\"primaryAsset\":\"AAPL\",\"status\":\"selected\",\"selected\":true,\"summary\":\"Apple fined $1.8 billion by EU for App Store antitrust violations.\",\"suppressionReason\":\"\",\"supportingEvents\":[{\"url\":\"https://www.reuters.com/technology/apple-eu-antitrust-fine-2026/\",\"title\":\"Apple fined $1.8B by EU\"},{\"url\":\"https://www.ft.com/content/apple-eu-fine-2026\",\"title\":\"Apple hit with record EU antitrust penalty\"}],\"eventRefs\":[],\"dataQualityNotes\":[\"Fine amount is confirmed. Appeal timeline is uncertain.\"],\"payload\":{\"affected_buckets\":[\"regulatory\",\"antitrust\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"negative\",\"rationale\":\"Regulatory pressure on App Store economics could affect services revenue margin.\"},\"watch_next\":[\"Appeal decision timeline\",\"Changes to App Store fee structure\"]},\"data_quality_notes\":[\"Fine amount is confirmed. Appeal timeline is uncertain.\"]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-aapl-regulatory-fine\"]"
+  },
+
+  "quiet_decision": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "no_push",
+    "urgency": "low",
+    "reason": "",
+    "skipReason": "no_material_candidates",
+    "notificationMessage": "",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[]",
+    "selectedFindingIdsJson": "[]"
+  },
+
+  "invalid_analysis": {
+    "analysisStatus": "error",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "analyst failure",
+    "skipReason": "",
+    "notificationMessage": "Something happened.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-nvda-test\",\"findingType\":\"event_impact\",\"primaryAsset\":\"NVDA\",\"status\":\"selected\",\"selected\":true,\"summary\":\"Revenue guidance raised by 15 percent.\",\"suppressionReason\":\"\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"earnings\",\"revenue\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"Higher guidance reflects strong AI demand.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-nvda-test\"]"
+  },
+
+  "invalid_health": {
+    "analysisStatus": "valid",
+    "healthStatus": "error",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "",
+    "skipReason": "",
+    "notificationMessage": "Something happened.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-nvda-test\",\"findingType\":\"event_impact\",\"primaryAsset\":\"NVDA\",\"status\":\"selected\",\"selected\":true,\"summary\":\"Revenue guidance raised by 15 percent.\",\"suppressionReason\":\"\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"earnings\",\"revenue\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"Higher guidance reflects strong AI demand.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-nvda-test\"]"
+  },
+
+  "suppressed_event": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "low",
+    "reason": "One finding selected, one suppressed.",
+    "skipReason": "",
+    "notificationMessage": "NVDA demand signal confirmed.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-nvda-suppressed\",\"findingType\":\"event_impact\",\"primaryAsset\":\"NVDA\",\"status\":\"suppressed\",\"selected\":true,\"suppressionReason\":\"duplicate_of_prior_run\",\"summary\":\"NVDA revenue guidance raised.\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"earnings\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"Strong demand signal.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-nvda-suppressed\"]"
+  },
+
+  "unrelated_ticker": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "Event found for MSFT — not in configured watchlist.",
+    "skipReason": "",
+    "notificationMessage": "MSFT quarterly earnings beat estimates.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-msft-earnings\",\"findingType\":\"event_impact\",\"primaryAsset\":\"MSFT\",\"status\":\"selected\",\"selected\":true,\"suppressionReason\":\"\",\"summary\":\"Microsoft quarterly revenue beat analyst estimates by 4 percent.\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"earnings\",\"revenue\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"Revenue beat supports Azure cloud growth thesis.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-msft-earnings\"]"
+  },
+
+  "empty_selected_events": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "low",
+    "reason": "alertDecision=push but selectedEventsJson is empty (edge case).",
+    "skipReason": "",
+    "notificationMessage": "Market watch summary.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[]",
+    "selectedFindingIdsJson": "[]"
+  },
+
+  "wrong_finding_type": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "Anomaly attribution finding — not event_impact.",
+    "skipReason": "",
+    "notificationMessage": "NVDA price anomaly detected.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"anomaly-nvda-price-spike\",\"findingType\":\"anomaly_attribution\",\"primaryAsset\":\"NVDA\",\"status\":\"selected\",\"selected\":true,\"suppressionReason\":\"\",\"summary\":\"NVDA share price rose 8 percent without a clear catalyst.\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"price_movement\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"neutral\",\"rationale\":\"Price movement without business catalyst is not material for long-term thesis.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"anomaly-nvda-price-spike\"]"
+  },
+
+  "string_selected_old_schema": {
+    "analysisStatus": "valid",
+    "healthStatus": "valid",
+    "alertDecision": "push",
+    "urgency": "medium",
+    "reason": "Legacy eventCandidatesJson item erroneously passed here — selected is string.",
+    "skipReason": "",
+    "notificationMessage": "NVDA event.",
+    "runAtMs": 1793000000000,
+    "selectedEventsJson": "[{\"findingId\":\"event-impact-nvda-legacy\",\"findingType\":\"event_impact\",\"primaryAsset\":\"NVDA\",\"status\":\"selected\",\"selected\":\"true\",\"suppressionReason\":\"\",\"summary\":\"Revenue guidance raised significantly.\",\"supportingEvents\":[],\"eventRefs\":[],\"dataQualityNotes\":[],\"payload\":{\"affected_buckets\":[\"revenue\",\"earnings\"],\"decision_lens\":{\"thesis_impact\":{\"direction\":\"positive\",\"rationale\":\"Strong revenue guidance supports long-term demand thesis.\"},\"watch_next\":[]},\"data_quality_notes\":[]}}]",
+    "selectedFindingIdsJson": "[\"event-impact-nvda-legacy\"]"
+  }
+}

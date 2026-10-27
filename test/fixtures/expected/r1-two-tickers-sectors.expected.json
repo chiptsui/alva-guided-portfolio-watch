@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "config": {
+    "tickers": ["JPM", "XOM"],
+    "horizon": "long-term",
+    "guidanceMode": "neutral"
+  }
+}

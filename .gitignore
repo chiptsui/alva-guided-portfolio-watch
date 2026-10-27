@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+*.log
+npm-debug.log*
+
+# Internal engineering scaffolding (not reviewer deliverables)
+TECHNICAL_BASELINE.md
+ARCHITECTURE_REVIEW.md
+
+# Internal tooling lock file
+skills-lock.json
+
+# Operational maintenance scripts with hardcoded ALFS paths
+scripts/patch-snapshot-monctx.js
+
+# Platform-owned Alva Skill (not this project's deliverable)
+.agents/skills/alva/
+
+# Temporary debug artifacts
+/tmp/

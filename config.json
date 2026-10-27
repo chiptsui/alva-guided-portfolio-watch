@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "tickers": [
+    "NVDA",
+    "TSLA",
+    "AAPL"
+  ],
+  "holdings": {
+    "NVDA": "watchlist",
+    "TSLA": "watchlist",
+    "AAPL": "watchlist"
+  },
+  "horizon": "long-term",
+  "guidanceMode": "guided",
+  "preferencesNote": "The user is watching NVDA, TSLA, AAPL (watchlist — no positions or holdings provided).\nInvestment horizon: 3–5+ years.\n\nUse plain, jargon-free English. Define any financial term when it first appears. Frame findings around what the user should pay attention to and why, not around financial mechanics.\n\nAlert policy: focus on material long-term business developments only. Exclude pure price movements, technical analysis, and unsubstantiated rumors. Include: earnings/guidance changes, regulatory or legal events, strategic announcements (M&A, partnerships), and supply-chain or product changes with multi-year business impact.\n\nNo positions, quantities, cost bases, or portfolio values were provided. Do not compute or imply portfolio-level performance figures or percentage gains/losses.",
+  "sectorFocusAreas": {},
+  "createdAt": "2026-10-24T07:00:00.000Z",
+  "updatedAt": "2026-10-24T22:00:00.000Z"
+}

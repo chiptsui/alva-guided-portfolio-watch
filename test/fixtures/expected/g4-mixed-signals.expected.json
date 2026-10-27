@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "config": {
+    "guidanceMode": "guided",
+    "horizon": "long-term"
+  }
+}

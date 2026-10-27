@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "config": {
+    "guidanceMode": "standard",
+    "tickers": ["NVDA", "AMD"],
+    "holdings": { "NVDA": "holding", "AMD": "holding" },
+    "horizon": "long-term"
+  }
+}

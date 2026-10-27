@@ -1,0 +1,10 @@
+{
+  "_comment": "Known limitation: holdings inference is global-default only. When both 'own' and 'watching' signals are present, all tickers default to 'holding'. Per-ticker classification is not supported.",
+  "ok": true,
+  "config": {
+    "tickers": ["AAPL", "MSFT"],
+    "holdings": { "AAPL": "holding", "MSFT": "holding" },
+    "guidanceMode": "neutral",
+    "horizon": "long-term"
+  }
+}

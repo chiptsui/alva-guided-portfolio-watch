@@ -1,0 +1,10 @@
+{
+  "_comment": "Jargon signals (P/E ratios, free cash flow) are priority 2a. Worry signals are priority 2b. Jargon wins → standard. Also verifies P and E from 'P/E' are NOT extracted as tickers.",
+  "ok": true,
+  "config": {
+    "tickers": ["NVDA"],
+    "holdings": { "NVDA": "holding" },
+    "guidanceMode": "standard",
+    "horizon": "long-term"
+  }
+}

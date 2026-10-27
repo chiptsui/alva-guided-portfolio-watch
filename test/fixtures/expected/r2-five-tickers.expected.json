@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "config": {
+    "tickers": ["MSFT", "AMZN", "BRK.B", "V", "MCD"],
+    "horizon": "long-term"
+  }
+}
