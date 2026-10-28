@@ -75,7 +75,26 @@ Delegated entirely to `@alva/portfolio-watch`. We do not reimplement its event c
 
 Our wrapper adds one deterministic `eligible()` guard post-analysis: accepts only `event_impact` findings for monitored symbols passing a business-relevance regex, and rejects `rumor_only` or `unsubstantiated` findings.
 
-### B.5 What Is Deterministic vs. LLM-Driven
+### B.5 Guidance without Prescription — Design Contract
+
+Guidance mode controls communication style and explanation depth. It does not unlock prescriptive investment advice.
+
+Across all modes:
+
+- No buy, sell, hold, position-sizing, or allocation instructions.
+- Users retain full responsibility for investment decisions.
+- Present relevant evidence, known uncertainties, missing context, and questions worth investigating.
+- Signal labels (Improving / Declining / Mixed) describe metric trends — not investment ratings or recommendations.
+
+Enforcement layers:
+
+1. **`buildPreferencesNote()`** — a shared `decisionSupportNote` block appears in every `portfolioWatchPreferencesNote`, regardless of guidance mode.
+2. **Alert format** (C.3) — no "What you should do" section. "Attention needed" is one sentence, never a buy/sell directive.
+3. **Playbook disclaimer** — "not a buy or sell instruction" in the beginner guide; "not investment ratings or recommendations" on signal labels.
+
+**Limitation:** including this instruction in the prompt reduces the probability of prescriptive LLM output but does not guarantee it. No keyword-based suppression is applied to alert content; such suppression could incorrectly block legitimate financial reporting.
+
+### B.6 What Is Deterministic vs. LLM-Driven
 
 | Decision | Owner | Mechanism |
 |---|---|---|

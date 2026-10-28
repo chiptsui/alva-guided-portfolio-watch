@@ -31,7 +31,7 @@ The Skill is designed to be reusable: changing `config.json` and re-running the 
 
 - **Business changes only, not price noise.** The Skill excludes price data and monitors for events with multi-year business impact (earnings changes, regulatory decisions, strategic announcements, supply-chain shifts). A beginner monitoring prices daily is likely to over-react and undermine a long-term strategy.
 - **Explanation-first structure.** Every alert and insight card follows: *What happened → Why it matters → What remains uncertain → What to watch next → Sources.* Metric labels in guided mode read "Total sales," "Profit after costs," "Cash generated" — not their technical names.
-- **Guidance inferred, never asked.** The agent infers communication preference from natural-language signals. It never asks "are you a beginner?" The mode is a user preference, adjustable via AGENTS.md.
+- **Guidance inferred, not asked — with explicit decision boundaries.** The agent infers communication preference from natural-language signals; it never asks "are you a beginner?" Prompt instructions in `buildPreferencesNote()` direct the LLM to surface evidence and uncertainties rather than recommend buying, selling, or sizing positions. Alert formatting reinforces this; actual LLM output compliance is unverified. The mode is adjustable via AGENTS.md.
 - **Evidence gate on alerts.** Findings without at least one external HTTPS source URL are suppressed before delivery. This gate was added after investigating the first production run (see Test Evidence).
 
 ---
@@ -56,13 +56,13 @@ User intent (free text)
            → FEED_ALERT → web channel 11017
 ```
 
-`parseIntent()` maps free text to tickers, guidance mode, horizon, ownership classification, and a deterministic `preferencesNote` prose string. That string becomes the `portfolioWatchPreferencesNote` passed to `@alva/portfolio-watch`, directing the LLM to frame findings for the user's preference level.
+`parseIntent()` maps free text to tickers, guidance mode, horizon, ownership classification, and a deterministic `preferencesNote` prose string. That string becomes the `portfolioWatchPreferencesNote` passed to `@alva/portfolio-watch`. It now includes a shared decision-support boundary instruction across all guidance modes (directing the LLM not to recommend buying, selling, or sizing positions), though actual LLM output compliance is unverified. **Note:** the Alva cloud MonitoringConfig was written before this addition and has not been updated; the live pipeline does not include the new instruction.
 
 ---
 
 ## Verified Evidence
 
-### 348 local tests, 0 failures
+### 404 local tests, 0 failures
 
 | Suite | Tests | Covers |
 |---|---|---|
@@ -72,6 +72,7 @@ User intent (free text)
 | Guided narrative | 47 | FCF vs OCF, four-section rendering, accordion CSS |
 | Skill reusability | 39 | Full pipeline with MSFT/JPM/XOM synthetic data, no source changes |
 | Monitor alert logic | 93 | `eligible()`, URL constructor validation, malformed URL rejection, alertOutput schema |
+| Decision-support contract | 56 | Boundary instruction in all guidance modes, no prescriptive static text, G-1–G-4 inference regression, schema validation, alert template structural safety |
 
 ### Production monitoring run — run 48637368 (2026-10-26)
 
@@ -108,6 +109,7 @@ A minimal dedicated feed (`gpw-alert-test`) was created, triggered twice, and fu
 | Item | Status |
 |---|---|
 | Real GPW event-to-user notification | **Not verified.** Corrected script deployed; cronjobs paused. No production alert has been delivered. |
+| Decision-support prompt instruction | Added to `buildPreferencesNote()` in this repo. The Alva cloud MonitoringConfig was written before this change and has not been updated — the live deployed pipeline does not include the new boundary instruction. |
 | Financial snapshot freshness | Stored snapshot from a manual run. Daily refresh requires unpausing cronjob 40870 and a valid ARRAYS_JWT. |
 | Cronjobs 40870 and 40871 | Both intentionally paused. No automated runs occur without a deliberate decision to unpause. |
 | Source URL coverage | One production run, one finding with no external URL. Unknown whether future findings from other event lanes will carry verifiable URLs. |
@@ -152,4 +154,4 @@ A minimal dedicated feed (`gpw-alert-test`) was created, triggered twice, and fu
 | `templates/gpw-fundamentals.stub.js` | Fundamentals feed script |
 | `templates/gpw-playbook.stub.html` | Playbook template |
 | `config/monitoring-config.schema.json` | MonitoringConfig JSON schema |
-| `test/` | 6 test suites, 348 tests |
+| `test/` | 7 test suites, 404 tests |

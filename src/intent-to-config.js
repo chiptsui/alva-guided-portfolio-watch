@@ -371,6 +371,14 @@ function buildPreferencesNote(cfg) {
     "Include: earnings/guidance changes, regulatory or legal events, strategic announcements " +
     "(M&A, partnerships), and supply-chain or product changes with multi-year business impact.";
 
+  // Decision-support boundaries — shared across all guidance modes.
+  // Present in every portfolioWatchPreferencesNote regardless of mode.
+  const decisionSupportNote =
+    "Guidance boundaries: do not recommend buying, selling, holding, or sizing any position. " +
+    "Do not give personalized allocation guidance. " +
+    "Highlight relevant evidence, known uncertainties, missing context, and questions worth investigating. " +
+    "The user retains full responsibility for investment decisions.";
+
   // Weights note
   let weightsNote = "";
   if (weights && Object.keys(weights).length > 0) {
@@ -405,6 +413,8 @@ function buildPreferencesNote(cfg) {
     guidanceInstructions,
     "",
     alertPolicy,
+    "",
+    decisionSupportNote,
     weightsNote,
     focusLines,
     unknownsNote,

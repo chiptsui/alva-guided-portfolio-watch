@@ -43,7 +43,7 @@ Initial QA confirmed correct data on anonymous desktop, real iPhone private brow
 
 ## Evidence
 
-348 local tests, 0 failures (full breakdown in README). Real NVDA/TSLA/AAPL financial statements loaded from a manual run of the fundamentals feed. Playbook 33229 v1.0.3 published and publicly accessible. Skill reusability confirmed with MSFT/JPM/XOM scenarios using no source-code changes. Design lint: 0 errors, 0 warnings.
+404 local tests, 0 failures (full breakdown in README). Real NVDA/TSLA/AAPL financial statements loaded from a manual run of the fundamentals feed. Playbook 33229 v1.0.3 published and publicly accessible. Skill reusability confirmed with MSFT/JPM/XOM scenarios using no source-code changes. Design lint: 0 errors, 0 warnings.
 
 ---
 

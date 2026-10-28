@@ -13,7 +13,7 @@ A reusable Alva Skill for long-term investors who want plain-language monitoring
 | Published Playbook | https://alva.ai/u/c9jsd/playbooks/guided-portfolio-watch |
 | Design Process | [DESIGN_PROCESS.md](DESIGN_PROCESS.md) |
 | Skill definition | [.agents/skills/guided-portfolio-watch/SKILL.md](.agents/skills/guided-portfolio-watch/SKILL.md) |
-| Run all tests | `node test/run-tests.js && node test/yoy-insights.test.js && node test/playbook-logic.test.js && node test/guided-narrative.test.js && node test/reusability.test.js && node test/monitor-alert.test.js` |
+| Run all tests | `node test/run-tests.js && node test/yoy-insights.test.js && node test/playbook-logic.test.js && node test/guided-narrative.test.js && node test/reusability.test.js && node test/monitor-alert.test.js && node test/decision-support.test.js` |
 
 ---
 
@@ -27,7 +27,7 @@ A reusable Alva Skill for long-term investors who want plain-language monitoring
 | AI monitoring pipeline | Exercised once in production (110 events, 1 finding selected) |
 | Financial-event notification | Not yet verified end-to-end — cronjobs remain intentionally paused |
 | Alva web delivery infrastructure | Verified independently (`status=sent` via isolated test) |
-| Local test suite | 348 tests, 0 failures |
+| Local test suite | 404 tests, 0 failures |
 | Reusability | Demonstrated via local alternate-ticker scenarios (MSFT/JPM/XOM); `HOME` path in Playbook template requires manual update for a different account |
 
 ---
@@ -71,6 +71,7 @@ test/
     guided-narrative.test.js    # Guided mode correctness (47)
     reusability.test.js         # Alternate-ticker reusability (39)
     monitor-alert.test.js       # Alert pipeline logic (93)
+    decision-support.test.js    # Decision-support contract regression (56)
     fixtures/                   # Test inputs and expected outputs
 scripts/
     gpw-alert-test.js           # Isolated delivery test (evidence artifact)
@@ -88,13 +89,14 @@ DESIGN_RATIONALE.md             # Supporting design reference
 No Alva account or cloud credentials are required. Tests run against local fixtures with bare Node.js.
 
 ```bash
-node test/run-tests.js           # 14 intent parsing tests
-node test/yoy-insights.test.js   # 78 YoY insight unit tests
-node test/playbook-logic.test.js # 77 Playbook rendering tests
+node test/run-tests.js             # 14 intent parsing tests
+node test/yoy-insights.test.js     # 78 YoY insight unit tests
+node test/playbook-logic.test.js   # 77 Playbook rendering tests
 node test/guided-narrative.test.js # 47 guided narrative tests
-node test/reusability.test.js    # 39 reusability tests
-node test/monitor-alert.test.js  # 93 alert pipeline tests
-# Total: 348 tests, 0 failures
+node test/reusability.test.js      # 39 reusability tests
+node test/monitor-alert.test.js    # 93 alert pipeline tests
+node test/decision-support.test.js # 56 decision-support contract tests
+# Total: 404 tests, 0 failures
 ```
 
 ---

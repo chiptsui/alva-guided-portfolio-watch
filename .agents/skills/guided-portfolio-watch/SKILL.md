@@ -23,6 +23,21 @@ The Skill is reusable: changing config.json and re-running the feeds produces a 
 
 ---
 
+## Guidance without Prescription
+
+Guidance mode controls communication style and explanation depth only. It does not unlock prescriptive investment advice.
+
+Across all modes (guided, neutral, standard):
+
+- **No investment instructions.** Do not recommend buying, selling, holding, or sizing any position. Do not give personalized allocation guidance.
+- **User responsibility.** The user retains full responsibility for investment decisions. The Skill surfaces information; it does not make decisions.
+- **Evidence and uncertainty first.** Highlight relevant evidence, known uncertainties, missing context, and questions worth investigating — rather than conclusions about what to do.
+- **Labels are not ratings.** Signal labels (Improving / Declining / Mixed) describe year-over-year metric trends. They are not investment ratings or recommendations.
+
+These boundaries are enforced in `buildPreferencesNote()` (shared instruction in every `portfolioWatchPreferencesNote`, regardless of mode), the alert format (no "buy/sell" section), and the Playbook disclaimer.
+
+---
+
 ## Step 1 — Parse User Intent
 
 Call `src/intent-to-config.js` (or apply its logic) to extract a MonitoringConfig from the user's message. Do this before asking any questions.

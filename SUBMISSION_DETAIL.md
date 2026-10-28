@@ -193,7 +193,7 @@ Actions: `openUrlAction("View in Playbook", url)` + `sendPromptAction("Tell me m
 
 ## 6. Test Evidence
 
-### Local Test Suites (348 tests, 0 failures)
+### Local Test Suites (404 tests, 0 failures)
 
 | Suite | File | Tests | Coverage |
 |---|---|---|---|
@@ -203,10 +203,11 @@ Actions: `openUrlAction("View in Playbook", url)` + `sendPromptAction("Tell me m
 | Guided narrative correctness | `test/guided-narrative.test.js` | 47 | FCF vs OCF terminology, four-section rendering, neutral mode, accordion CSS |
 | Skill reusability | `test/reusability.test.js` | 39 | Full pipeline with MSFT/JPM/XOM synthetic data — no source-code changes required |
 | Monitor alert logic | `test/monitor-alert.test.js` | 93 | `eligible()` type correctness, URL constructor validation, malformed URL rejection, provenance policy, mixed-finding isolation, suppression, alertOutput schema, structural stub assertions |
+| Decision-support contract | `test/decision-support.test.js` | 56 | Boundary instruction in all guidance modes, mode-specific text regression, G-1–G-4 inference regression, schema validation, alert template structural safety, prescriptive-phrase absence in static template |
 
 Run all suites:
 ```
-node test/run-tests.js && node test/yoy-insights.test.js && node test/playbook-logic.test.js && node test/guided-narrative.test.js && node test/reusability.test.js && node test/monitor-alert.test.js
+node test/run-tests.js && node test/yoy-insights.test.js && node test/playbook-logic.test.js && node test/guided-narrative.test.js && node test/reusability.test.js && node test/monitor-alert.test.js && node test/decision-support.test.js
 ```
 
 ### Production Monitoring Run (run 48637368, 2026-10-26)
@@ -340,7 +341,7 @@ The first trigger was executed on a PAUSED cronjob (as authorized), and produced
 | MonitoringConfig written to ALFS | ✓ `/alva/home/c9jsd/feeds/gpw-monitor/v1/config.json` |
 | Feed scripts deployed | ✓ gpw-fundamentals (36243, PAUSED), gpw-monitor (36244, PAUSED) |
 | Playbook shows visible data | ✓ Real NVDA/TSLA/AAPL financial statements, QA verified |
-| 348 local tests, 0 failures | ✓ 6 suites |
+| 404 local tests, 0 failures | ✓ 7 suites |
 | Production monitoring run evidence | ✓ Run 48637368, 110 events, 1 finding, alertDecision=push; post-processing bug prevented delivery; corrected script deployed |
 | V2 alertOutput delivery verified | ✓ status="sent", provider="web", channel 11017 (isolated test) |
 | Limitations documented | ✓ Section 8 |
